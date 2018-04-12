@@ -72,9 +72,10 @@ export default {
       fileArray.forEach((file)=>{
         formData.append("file",file);//循环遍历把文件对象插到formData对象上
       });
+      debugger
       let config = {  
         headers: {  
-          'Content-Type': 'multipart/form-data'  
+          'Content-Type': 'multipart/form-data' ,
         }  
       }  
       this.tooltip.Loading.start("上传中");
