@@ -46,7 +46,7 @@ router.post('/upload',function(req,res,next){
         //     var path = file[1].path;
         // });
         res.json({code:'0',success: true, message:"上传成功",data:fileUrl});
-        res.end();
+        res.end(); 
     })
     .on('error', function(err) {
       console.error('上传失败：', err.message); 
