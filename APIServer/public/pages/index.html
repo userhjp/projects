@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="email=no" name="format-detection">
+    <title>新闻资讯</title>
+    <link href="../css/base.css" type="text/css" rel="stylesheet" />
+    <link href="../css/style_h.css" type="text/css" rel="stylesheet" />
+    <script src="../js/lib/flexible.js"></script>
+    <script src="../js/lib/angular-1.4.1.min.js"></script>
+    <style>
+        .swiper-container img{
+            width: 100%;
+            height: 3.066667rem;
+        }
+    </style>
+</head>
+<body ng-controller="indexController">
+    <div class="view active news" id="mainview">
+        <header class="header">
+            <a class="h-return" onclick="history.back()"></a>
+            <h1 class="h-title">{{myString}}新闻</h1>
+            <a class="h-more" href="/pages/addnews.html">添加</a>
+        </header>
+        <div class="tit swiper-container1">
+            <ul class="swiper-wrapper">
+                <li class="swiper-slide on"><a>益农简讯</a></li>
+                <li class="swiper-slide"><a>天天读报</a></li>
+                <li class="swiper-slide"><a>惠农政策</a></li>
+            </ul>
+         </div>
+    <div class="pages panel active mescroll" id="scrollable" tabindex="0"> 
+            <!-- <div class="swiper-container">
+                <ul class="swiper-wrapper">
+                    <li class="swiper-slide" ng-repeat="banner in bannerList" ng-click="openlink(banner)">
+                        <a><img ng-src="{{banner.picurl}}"></a>
+                    </li>
+                </ul>
+            </div> -->
+            <div class="lis" ng-repeat="li in list">
+                <img ng-src="{{li.img[0]}}"/>
+                <div class="txt">
+                    <strong ng-bind="li.title"></strong>
+                    <p ng-bind="li.content">内容</p>
+                    <time ng-bind="li.updatatime |date:'yyyy-MM-dd HH:mm:ss'">2018-07-03 16:32:00</time>
+                    <a ng-click="delete(li._id)">删除</a><a ng-click="Go(li._id)">修改</a>
+                </div>
+            </div>
+   </div>
+</body>
+<script src="../js/controllers/indexController.js"></script>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

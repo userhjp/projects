@@ -1,0 +1,16 @@
+@charset "utf-8";  
+/*! 
+ * @名称：base.css 
+ * @功能：SVG图标 
+ */  
+ @font-face {
+  font-family: 'iconfont';  /* project id 598964 */
+  src: url('//at.alicdn.com/t/font_598964_6qkuim9r95fry66r.eot');
+  src: url('//at.alicdn.com/t/font_598964_6qkuim9r95fry66r.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_598964_6qkuim9r95fry66r.woff') format('woff'),
+  url('//at.alicdn.com/t/font_598964_6qkuim9r95fry66r.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_598964_6qkuim9r95fry66r.svg#iconfont') format('svg');
+}
+  .iconfont{
+    font-family: 'iconfont';
+  }
