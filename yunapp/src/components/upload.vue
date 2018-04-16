@@ -91,7 +91,6 @@ export default {
         }  
       }).catch(err=>{
         this.tooltip.Toast.Error(err);
-        this.tooltip.Toast.Error(err);
       });
     }
   }
