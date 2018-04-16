@@ -3,7 +3,7 @@
     <div class="attach">
       <div class="upload" v-for="(imges,index) in img">
         <i class="remove" @click="removeimg(index,imges)">&#xe70a;</i>
-        <img :src="'http://localhost:3000/'+imges" alt="">
+        <img :src="'http://localhost:3000'+imges" alt="">
       </div>
       <div class="upload">
         <div>

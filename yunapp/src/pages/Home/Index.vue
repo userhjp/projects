@@ -16,7 +16,7 @@
             </div>
             <div class="cont">
               <div v-if="item.img.length" v-bind:class="{ 'image-1': item.img.length<2 ,'image': item.img.length>1}">
-                  <img v-for="img in item.img" :src="'http://localhost:3000/'+img" alt="">
+                  <img v-for="img in item.img" :src="'http://localhost:3000'+img" alt="">
               </div>
               <p v-text="item.content"></p>
             </div>
