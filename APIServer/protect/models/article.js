@@ -30,10 +30,16 @@ PaperDAO.prototype.save = function(obj, callback){
   });
 }
 //查询发表动态列表联合用户uid查询
+/**@param num 当前页码
+ * @param size 返回条数 
+*/
 PaperDAO.prototype.findList = function(Obj, callback){
   article.find(null,null,{sort:({creattime:-1}),skip:0,limit:8},(err, data)=>{
     callback(err, data);
   }).populate({path:'uid',select:'headimg nickname',options:{}})
 } 
-
+//点赞
+// PaperDAO.prototype.praise = function(Obj, callback){
+//   article.update({_id:Obj.uid})
+// }
 module.exports = new PaperDAO();
