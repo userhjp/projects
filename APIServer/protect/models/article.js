@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var mongodb = require('../mongodb');
+// var mongodb = require('../mongodb');
 var Schema   = mongoose.Schema;
 var articleSchema = new mongoose.Schema({
 	//required 必填,default： 默认值,validate: 自定义匹配(指定一个函数参数为当前字段),min: 最小值(只适用于数字),max: 最大值(只适用于数字),

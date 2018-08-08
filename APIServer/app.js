@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes');
 var session = require('express-session');
 var loginfilter = require('./protect/filters/loginFilter');
-
+require('./protect/mongodb')
 var app = express();
 //设置视图模板
 app.set('views', path.join(__dirname, 'views'));
