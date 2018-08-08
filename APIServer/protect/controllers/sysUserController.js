@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var user = require('./../models/user');
+var user = require('./../models/sysUserDAO');
 var jwt = require('jsonwebtoken');
 //统一回调函数
 var callback = function(req, res,code, message, data){
@@ -55,7 +55,7 @@ router.all('/logout',function(req,res,next){
     req.session.destroy();
     callback(req, res, '0',"退出成功", null);
 })
-//获取所有用户
+//获取用户列表
 router.all('/getAllUser',function(req,res,next){
     var param = getparam(req);
     user.getAllUser(param, function(err, data){

@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes');
 var session = require('express-session');
 var loginfilter = require('./protect/filters/loginFilter');
-require('./protect/mongodb')
+require('./protect/mongodb')//连接数据库
 var app = express();
 //设置视图模板
 app.set('views', path.join(__dirname, 'views'));
@@ -19,11 +19,16 @@ app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// 使用 logger 将请求日志打印到控制台
 app.use(logger('dev'));
+//用body parser 来解析post和url信息中的参数
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'dist')));
+
+//设置静态文件夹
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'dist')));
+
 app.use(cookieParser('app-session'));
 // 设置 session
 app.use(session({
