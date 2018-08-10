@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var routes = require('./routes');
+var router = express.Router();
 var session = require('express-session');
 var loginfilter = require('./protect/filters/loginFilter');
 require('./protect/mongodb')//连接数据库
@@ -42,6 +43,7 @@ app.use(session({
 
 //登录过滤器
 app.use(loginfilter);
+app.use(require('./protect/filters/verifyToken'));
 //设置跨域访问
 app.all('*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");

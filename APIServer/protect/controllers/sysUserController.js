@@ -1,74 +1,96 @@
 var express = require('express');
 var router = express.Router();
-var user = require('./../models/sysUserDAO');
+var SysUser = require('./../models/SysUserModel');
 var jwt = require('jsonwebtoken');
-//统一回调函数
-var callback = function(req, res,code, message, data){
-	res.json({code:code,success: true, message:message, data: data});
-    res.end();
-}
+
+
 //判断请求方式获取参数
 var getparam = function(req){
-    if (req.method == "POST") {
-        return req.body;
-    } else{
+    // if (req.method == "POST") {
+    //     return req.body;
+    // } else{
         return req.query || req.params; 
-    }
+    // }
 }
+// router.use(require('../filters/verifyToken'));
 //注册账号
-router.all('/register',function(req,res,next){
+router.post('/register',function(req,res){
     var param = getparam(req);
-    user.save(param, function(err, data){
+    // param.creattime = Date.now();
+    // param.updatatime = Date.now();
+    param.nickname = param.loginname;
+    SysUser.create(param, function(err, doc){
         if(err){
             var code=err.code , err="账户名以存在"
         } else {
-            req.session.uid = data._id;
+            req.session.uid = doc._id;
         }
-        callback(req, res, code||"0" ,err || "注册成功", data);
+        res.json({
+            code:code||'0',
+            success: true,
+            message:err||'注册成功',
+            data: doc
+        });
     });
 })
 //登录
-router.all('/login',function(req,res,next){
+router.post('/login',function(req,res){
     var param = getparam(req);
-    user.login(param, function(err, data){
-        var msg = data?"登录成功":"用户名或密码错误";
-        var code = data?"0":"-98";
-        if(data){
-            req.session.uid = data._doc._id;
-            data._doc['uat'] = jwt.sign({'_id': data._doc._id },'u_token.key',{
-                expiresIn: 60*60*24  // 24小时过期
+    var query = { loginname:param.loginname, password:param.password };//查询条件
+    var fields = { password:0 };//返回结果控制
+    SysUser.findOne(query, fields, function(err, doc){
+        var msg = doc?"登录成功":"用户名或密码错误";
+        var code = doc?"0":"-98";
+        var data = {};
+        if(doc){
+            data['uat'] = jwt.sign({'_id': doc._doc._id },'u_token.key',{
+                expiresIn: 60*60*1  // 12小时过期
             });
-            jwt.verify(data._doc.uat, 'u_token.key', function (err, decode) {
-                if (err) {  //  时间失效的时候/ 伪造的token          
-                  // rs.json({err:err})
-                } else {
-                   // rq.decode = decode; 
-                    console.log(decode.msg);   // today  is  a  good  day
-                }
-            })
         }
-        callback(req, res, code , err || msg, data);
+        res.json({
+            code:code,
+            success: true,
+            message:msg,
+            data: data
+        });
     });
 })
 //退出登录
-router.all('/logout',function(req,res,next){
+router.post('/logout',function(req,res,next){
     req.session.destroy();
-    callback(req, res, '0',"退出成功", null);
+    res.json({
+        code:'0',
+        success: true,
+        message:'退出登录',
+        data: null
+    });
 })
 //获取用户列表
-router.all('/getAllUser',function(req,res,next){
+router.post('/getAllUser',function(req,res,next){
     var param = getparam(req);
-    user.getAllUser(param, function(err, data){
-        callback(req, res, '0' ,err || "成功", data);
+    var query = { isvalid:param.isvalid||1 };
+    var fields = { password:0 };
+    SysUser.find(query,fields, function(err, docs){
+        res.json({
+            code:err?err.code:'0',
+            success: true,
+            message:'成功',
+            data: docs
+        });
     });
 })
 //_id获取用户信息
-router.all('/getUserInfo',function(req,res,next){
+router.post('/getUserInfo',function(req,res){
     var param = getparam(req);
-    user.getUserInfo(param, function(err, data){
-        var msg = data?"成功":"用户不存在";
-        data = data._doc || "";
-        callback(req, res,'0', err || msg, data);
+    var fields = { password:0 };
+    SysUser.findById(param._id, fields, function(err, doc){
+        var msg = doc?"成功":"用户不存在";
+        res.json({
+            code:err?err.code:'0',
+            success: true,
+            message: msg,
+            data: doc
+        });
     });
 })
 module.exports = router;
