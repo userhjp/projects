@@ -75,21 +75,75 @@ router.post('/getAllUser',function(req,res,next){
             code:err?err.code:'0',
             success: true,
             message:'成功',
-            data: docs
+            data: { list: docs }
         });
     });
 })
 //_id获取用户信息
 router.post('/getUserInfo',function(req,res){
     var param = getparam(req);
+    var uid = param.userid||param.loginid;
     var fields = { password:0 };
-    SysUser.findById(param._id, fields, function(err, doc){
+    SysUser.findById(uid, fields, function(err, doc){
         var msg = doc?"成功":"用户不存在";
         res.json({
             code:err?err.code:'0',
             success: true,
             message: msg,
             data: doc
+        });
+    });
+})
+//修改/创建
+router.post('/addUser',function(req,res){
+    var param = getparam(req);
+    param['roleids'] = param['roleids']?param['roleids'].split(','):[];
+    if(param['_id']){
+        var query = { _id:param._id };
+        var fields = param;
+        var options = { };
+        SysUser.update(query, fields, options, function(err, doc){
+            var msg = "修改成功";
+            if(err){
+                if(err.code == 11000){
+                    msg = "登录名已存在"
+                }else{
+                    msg = err.message;
+                }
+            }
+            res.json({
+                code:err?err.code:'0',
+                success: true,
+                message: msg,
+                data: null
+            });
+        });
+    }else{
+        SysUser.create(param, function(err, doc){
+            if(err){
+                var code=err.code , err="登录名已存在"
+            }
+            res.json({
+                code:code||'0',
+                success: true,
+                message:err||'保存成功',
+                data: null
+            });
+        });
+    }
+
+})
+//_id删除
+router.post('/delUser',function(req,res){
+    var param = getparam(req);
+    var query = { _id:param._id };
+    SysUser.remove(query, function(err, doc){
+        var msg = doc?"删除成功":"角色不存在";
+        res.json({
+            code:err?err.code:'0',
+            success: true,
+            message: msg,
+            data: null
         });
     });
 })

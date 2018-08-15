@@ -1,6 +1,7 @@
 //路由配置
 module.exports = function (app) {
   app.use('/sys', require('../protect/controllers/SysUserController'));
+  app.use('/role', require('../protect/controllers/roleController'));
   app.use('/users', require('../protect/controllers/userController.js'));
   app.use('/news', require('../protect/controllers/newsController'));
   app.use('/article', require('../protect/controllers/articleController'));

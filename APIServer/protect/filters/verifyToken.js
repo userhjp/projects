@@ -1,6 +1,14 @@
 var jwt = require('jsonwebtoken');
 //判断请求方式获取参数
 var getparam = function(req){
+    var param = {};
+    for (var index in req.query) {
+    var val = req.query[index];
+    var key =  index;
+        if (val !== null && val !== undefined) {
+        param[key] = val;
+        }
+    }
     if (req.method == "POST") {
         return req.query;
     } else{
@@ -10,7 +18,9 @@ var getparam = function(req){
 module.exports = function(req, res, next){
     //白名单
     var verify = [
-                '/sys/login'
+                '/sys/login',
+                '/files/upload',
+                '/files/delete'
                  ];
     var path = verify.indexOf(req.path);
     if(path == -1){
@@ -27,7 +37,7 @@ module.exports = function(req, res, next){
                     return res.send({code:"401",success: true, message:"无效的uat"});
                 }        
             } else {
-                req.query._id = decode._id;
+                req.query.loginid = decode._id;
                 return next();  
             }
         })

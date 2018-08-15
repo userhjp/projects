@@ -41,18 +41,18 @@ app.use(session({
 
 }));
 
-//登录过滤器
-app.use(loginfilter);
-app.use(require('./protect/filters/verifyToken'));
 //设置跨域访问
 app.all('*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With,Content-Type");
   res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
   res.header("X-Powered-By",' 3.2.1');
   res.header("Content-Type", "application/json;charset=utf-8");
   next();
 });
+//登录过滤
+app.use(loginfilter);
+app.use(require('./protect/filters/verifyToken'));
 // 错误处理
 app.use(function(err, req, res, next) {
   // 设置局部变量，只在开发中提供错误。

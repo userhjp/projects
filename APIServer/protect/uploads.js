@@ -8,6 +8,7 @@ var cacheFolder = './public/upload/images/';
 router.post('/upload',function(req,res,next){
     var cdate = sd.format(new Date(),'YYYYMM');//当前日期
     var path = cacheFolder + cdate;
+    var ref = req.protocol+'://'+req.headers.host;//绝对地址
     try{
         fs.accessSync(path,fs.F_OK);
     }catch(e){
@@ -27,6 +28,7 @@ router.post('/upload',function(req,res,next){
     
    // var allFile=[];
     var fileUrl=[];
+    var fullurl = [];
     form.on('progress', function(bytesReceived, bytesExpected) {//在控制台打印文件上传进度
       var progressInfo = { 
          value: bytesReceived, 
@@ -39,13 +41,14 @@ router.post('/upload',function(req,res,next){
       // allFile.push([filed, file]);//收集传过来的所有文件
        var str = file.path.replace(/\\/g, '/').replace('public','');
        fileUrl.push(str);
+       fullurl.push(ref+str);
     })
     .on('end', function() { 
         // allFile.forEach(function(file,index){
         //     var fieldName=file[0];
         //     var path = file[1].path;
         // });
-        res.json({code:'0',success: true, message:"上传成功",data:fileUrl});
+        res.json({code:'0',success: true, message:"上传成功",url:fileUrl,fullurl:fullurl});
         res.end(); 
     })
     .on('error', function(err) {
@@ -69,8 +72,16 @@ router.post('/upload',function(req,res,next){
     }); 
 })
 //删除文件
-router.post('/delete',function(req,res,next){
-    var path = './public'+req.body.fileUrl;
+router.post('/delete',function(req,res){
+    var url = req.body.fileUrl||"";
+    if (url.startsWith('http://')) {
+        var x = url.indexOf("/");
+        for(var i = 0; i < 2; i++){
+            x=url.indexOf("/",x+1);
+        }
+        url = url.slice(x);
+    }
+     var path = './public' + url;
     try{
         fs.accessSync(path,fs.F_OK);
         fs.unlinkSync(path);//同步删除
