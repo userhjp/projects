@@ -1,21 +1,17 @@
 var jwt = require('jsonwebtoken');
-//判断请求方式获取参数
-var getparam = function(req){
+
+module.exports = function(req, res, next){
+    //过滤掉请求空参数
+    var params = req.query || req.params;
     var param = {};
-    for (var index in req.query) {
-    var val = req.query[index];
+    for (var index in params) {
+    var val = params[index];
     var key =  index;
         if (val !== null && val !== undefined) {
         param[key] = val;
         }
     }
-    if (req.method == "POST") {
-        return req.query;
-    } else{
-        return req.query || req.params; 
-    }
-}
-module.exports = function(req, res, next){
+    req.query = param;
     //白名单
     var verify = [
                 '/sys/login',
@@ -24,7 +20,7 @@ module.exports = function(req, res, next){
                  ];
     var path = verify.indexOf(req.path);
     if(path == -1){
-        var param = getparam(req);
+        var param = req.query;
         if(!param.uat){
             return res.send({code:"401",success: true, message:"uat不能为空"});
         } 

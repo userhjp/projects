@@ -1,23 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var Role = require('./../models/RoleModel');
-var jwt = require('jsonwebtoken');
-
-
-//判断请求方式获取参数
-var getparam = function(req){
-    // if (req.method == "POST") {
-    //     return req.body;
-    // } else{
-        return req.query || req.params; 
-    // }
-}
+//var jwt = require('jsonwebtoken');
 //新增编辑
 router.post('/add',function(req,res){
-    var param = getparam(req);
-    param['menuids'] = param['menuids'].split(',').map(e => {
-       return parseInt(e);
-    });
+    var param = req.query;
+    param['menukeys'] = param['menukeys'].split(',');
     if(param['_id']){
         var query = { _id:param._id };
         var fields = param;
@@ -55,7 +43,7 @@ router.post('/add',function(req,res){
 })
 //获取角色列表
 router.post('/getList',function(req,res,next){
-    var param = getparam(req);
+    var param = req.query
     var query = { };
     var fields = { };
     var resuit = { sort:({createtime:-1}) }//,skip:0,limit:8
@@ -70,7 +58,7 @@ router.post('/getList',function(req,res,next){
 })
 //_id获取角色信息
 router.post('/getInfo',function(req,res){
-    var param = getparam(req);
+    var param = req.query
     var query = { _id:param._id };
     var fields = { };
     Role.findById(query, fields, function(err, doc){
@@ -85,7 +73,7 @@ router.post('/getInfo',function(req,res){
 })
 //_id删除
 router.post('/del',function(req,res){
-    var param = getparam(req);
+    var param = req.query
     var query = { _id:param._id };
     Role.remove(query, function(err, doc){
         var msg = doc?"删除成功":"角色不存在";

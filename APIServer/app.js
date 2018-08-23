@@ -51,7 +51,7 @@ app.all('*', function(req, res, next) {
   next();
 });
 //登录过滤
-app.use(loginfilter);
+//app.use(loginfilter);
 app.use(require('./protect/filters/verifyToken'));
 // 错误处理
 app.use(function(err, req, res, next) {

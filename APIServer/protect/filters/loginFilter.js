@@ -1,12 +1,4 @@
 var jwt = require('jsonwebtoken');
-//判断请求方式获取参数
-var getparam = function(req){
-    if (req.method == "POST") {
-        return req.body;
-    } else{
-        return req.query || req.params; 
-    }
-}
 module.exports = function(req, res, next){
     var param = getparam(req);
     var verify = [
