@@ -1,17 +1,6 @@
 var jwt = require('jsonwebtoken');
 
 module.exports = function(req, res, next){
-    //过滤掉请求空参数
-    var params = req.query || req.params;
-    var param = {};
-    for (var index in params) {
-    var val = params[index];
-    var key =  index;
-        if (val !== null && val !== undefined) {
-        param[key] = val;
-        }
-    }
-    req.query = param;
     //白名单
     var verify = [
                 '/sys/login',
@@ -34,10 +23,10 @@ module.exports = function(req, res, next){
                 }        
             } else {
                 req.query.loginid = decode._id;
-                return next();  
+                next();  
             }
         })
     }else{
-        return next(); 
+        next();
     }
 }

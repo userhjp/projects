@@ -10,14 +10,14 @@ router.post('/register',function(req,res){
     param.nickname = param.loginname;
     SysUser.create(param, function(err, doc){
         if(err){
-            var code=err.code , err="账户名以存在"
+            var code=err.code , message="账户名以存在"
         } else {
             req.session.uid = doc._id;
         }
         res.json({
             code:code||'0',
             success: true,
-            message:err||'注册成功',
+            message:message||'注册成功',
             data: doc
         });
     });
@@ -64,7 +64,7 @@ router.post('/getAllUser',function(req,res,next){
         loginname:new RegExp(param['loginname'], 'i'),
         name:new RegExp(param['name'], 'i')
     };
-    SysUser.find().count(conditions,function(err,count){
+    SysUser.find().countDocuments(conditions,function(err,count){
         var pages = Math.ceil(count/pagesize);
         SysUser.find(conditions,{ password:0 },{ sort:({creattime:-1}),skip:pagenum,limit:pagesize }, function(err, docs){
             res.json({
@@ -122,12 +122,12 @@ router.post('/addUser',function(req,res){
     }else{
         SysUser.create(param, function(err, doc){
             if(err){
-                var code=err.code , err="登录名已存在"
+                var code=err.code , message="登录名已存在"
             }
             res.json({
                 code:code||'0',
                 success: true,
-                message:err||'保存成功',
+                message:message||'保存成功',
                 data: null
             });
         });
@@ -137,8 +137,9 @@ router.post('/addUser',function(req,res){
 //_id删除
 router.post('/delUser',function(req,res){
     var param = req.query
-    var query = { _id:param._id };
-    SysUser.remove(query, function(err, doc){
+    var ids = param._ids.split(',');
+    var conditions = { _id:{ $in: ids } };
+    SysUser.remove(conditions, function(err, doc){
         var msg = doc?"删除成功":"角色不存在";
         res.json({
             code:err?err.code:'0',

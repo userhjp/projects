@@ -50,9 +50,12 @@ app.all('*', function(req, res, next) {
   res.header("Content-Type", "application/json;charset=utf-8");
   next();
 });
+//sign请求签名
+app.use(require('./protect/filters/verifySign'));
 //登录过滤
 //app.use(loginfilter);
 app.use(require('./protect/filters/verifyToken'));
+
 // 错误处理
 app.use(function(err, req, res, next) {
   // 设置局部变量，只在开发中提供错误。

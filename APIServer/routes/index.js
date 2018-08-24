@@ -6,10 +6,11 @@ module.exports = function (app) {
   app.use('/news', require('../protect/controllers/newsController'));
   app.use('/article', require('../protect/controllers/articleController'));
   app.use('/files', require('../protect/uploads'));
+  app.use('/option', require('../protect/controllers/optionContriller'));
   // 404 page.
   app.use(function (req, res,next) { 
     if (!res.headersSent) {
-      res.status(404).render('404')
+      res.status(404);
     }
   })
 }
