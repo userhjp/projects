@@ -16,7 +16,7 @@ router.post('/edit',function(req,res){
             res.json({
                 code:err?err.code:'0',
                 success: true,
-                message: msg,
+                message: err?err.message:'修改成功',
                 data: null
             });
         });
@@ -53,10 +53,9 @@ router.post('/getAllList',function(req,res,next){
     var pagesize = +param.pagesize||10;//每页条数
     var pagenum = (+param.pagenum-1) * pagesize;//当前页
     var conditions = { 
-        isvalid:param.isvalid||1,
-        loginname:new RegExp(param['typecode'], 'i'),
-        name:new RegExp(param['label'], 'i')
+        label:new RegExp(param['label'], 'i')
     };
+    if(param['typecode']) conditions['typecode']= param['typecode'];
     Option.find().countDocuments(conditions,function(err,count){
         var pages = Math.ceil(count/pagesize);
         Option.find(conditions,{ password:0 },{ sort:({creattime:-1}),skip:pagenum,limit:pagesize }, function(err, docs){
@@ -75,7 +74,7 @@ router.post('/getAllList',function(req,res,next){
 })
 //类型列表
 router.post('/getType',function(req,res){
-    Option.find(null, { typecode:1, _id:0 },{ sort:({creattime:-1}) }, function(err, docs){
+    Option.find().distinct('typecode', null, function(err, docs){
         var msg = docs?"成功":"查询错误";
         res.json({
             code:err?err.code:'0',
