@@ -3,9 +3,11 @@ var jwt = require('jsonwebtoken');
 module.exports = function(req, res, next){
     //白名单
     var verify = [
-                '/sys/login',
+                '/users/login',
                 '/files/upload',
-                '/files/delete'
+                '/files/delete',
+                '/users/register',
+                '/article/getAllList'
                  ];
     var path = verify.indexOf(req.path);
     if(path == -1){

@@ -21,7 +21,10 @@ module.exports = function(req, res, next){
     //白名单
     var verify = [
         '/files/upload',
-        '/files/delete'
+        '/files/delete',
+        '/users/login',
+        '/users/register',
+        '/article/getAllList'
          ];
     var path = verify.indexOf(req.path);
     if(path == -1){

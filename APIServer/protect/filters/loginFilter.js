@@ -3,7 +3,8 @@ module.exports = function(req, res, next){
     var param = getparam(req);
     var verify = [
                 '/users/getUserInfo',
-                '/article/publish'
+                '/article/publish',
+                '/users/register'
                  ];
     var path = verify.indexOf(req.path);
     if(path != -1){
