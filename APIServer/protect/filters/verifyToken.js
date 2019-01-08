@@ -7,7 +7,8 @@ module.exports = function(req, res, next){
                 '/files/upload',
                 '/files/delete',
                 '/users/register',
-                '/article/getAllList'
+                '/article/getAllList',
+                '/sys/login'
                  ];
     var path = verify.indexOf(req.path);
     if(path == -1){

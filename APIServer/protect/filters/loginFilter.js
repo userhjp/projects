@@ -4,7 +4,8 @@ module.exports = function(req, res, next){
     var verify = [
                 '/users/getUserInfo',
                 '/article/publish',
-                '/users/register'
+                '/users/register',
+                '/sys/login'
                  ];
     var path = verify.indexOf(req.path);
     if(path != -1){
